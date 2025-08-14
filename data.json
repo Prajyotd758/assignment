@@ -1,0 +1,103 @@
+{
+  "data": {
+    "sipBusinessData": {
+      "labels": ["Mar", "Apr", "May", "Jun"],
+      "datasets": [
+        {
+          "label": "SIP Amount (Cr)",
+          "data": [1.6, 1.7, 1.6, 1.5],
+          "borderWidth": 1,
+          "borderRadius": 8,
+          "backgroundColor": "rgba(99, 102, 241, 0.25)",
+          "borderColor": "rgba(99, 102, 241, 0.5)"
+        }
+      ]
+    },
+
+    "sipBusinessOpts": {
+      "scales": {
+        "y": {
+          "min": 0,
+          "max": 2.4
+        },
+        "x": { "grid": { "display": false } }
+      }
+    },
+    "monthlyData": {
+      "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+      "datasets": [
+        {
+          "label": "Equity",
+          "data": [0.2, 0.35, 0.4, 0.3, 0.55, 0.65, 0.5, 0.45, 0.35],
+          "fill": true,
+          "tension": 0.4,
+          "backgroundColor": "rgba(37,99,235,0.15)",
+          "borderColor": "rgba(37,99,235,0.8)"
+        },
+        {
+          "label": "Debt",
+          "data": [0.1, 0.15, 0.2, 0.25, 0.22, 0.3, 0.28, 0.26, 0.2],
+          "fill": true,
+          "tension": 0.4,
+          "backgroundColor": "rgba(16,185,129,0.15)",
+          "borderColor": "rgba(16,185,129,0.8)"
+        },
+        {
+          "label": "Hybrid",
+          "data": [0.05, 0.08, 0.1, 0.12, 0.18, 0.15, 0.2, 0.22, 0.18],
+          "fill": true,
+          "tension": 0.4,
+          "backgroundColor": "rgba(234,88,12,0.15)",
+          "borderColor": "rgba(234,88,12,0.8)"
+        }
+      ]
+    },
+    "monthlyOpts": {
+      "scales": {
+        "x": { "grid": { "display": false } },
+        "y": { "beginAtZero": true }
+      }
+    },
+    "bubbleOpts": {
+      "scales": {
+        "y": {
+          "min": 0,
+          "max": 10
+        },
+        "x": {
+          "min": 0,
+          "max": 10
+        }
+      }
+    },
+
+    "bubbleData": {
+      "datasets": [
+        {
+          "label": "Online",
+          "data": [{ "x": 4.5, "y": 8, "r": 25 }],
+          "backgroundColor": "rgba(37,99,235,0.35)",
+          "borderColor": "rgba(37,99,235,0.7)"
+        },
+        {
+          "label": "New",
+          "data": [{ "x": 5.5, "y": 2, "r": 22 }],
+          "backgroundColor": "rgba(234,179,8,0.35)",
+          "borderColor": "rgba(234,179,8,0.7)"
+        },
+        {
+          "label": "Active",
+          "data": [{ "x": 3.5, "y": 4, "r": 30 }],
+          "backgroundColor": "rgba(34,197,94,0.35)",
+          "borderColor": "rgba(34,197,94,0.7)"
+        },
+        {
+          "label": "Inactive",
+          "data": [{ "x": 5, "y": 5, "r": 50 }],
+          "backgroundColor": "rgba(244,63,94,0.35)",
+          "borderColor": "rgba(244,63,94,0.7)"
+        }
+      ]
+    }
+  }
+}

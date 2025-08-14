@@ -1,103 +1,192 @@
-import Image from "next/image";
+"use client";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+import {
+  FaLightbulb,
+  FaFilter,
+  FaCog,
+  FaBell,
+  FaStar,
+  FaUserFriends,
+  FaSearch,
+  FaLock,
+  FaGraduationCap,
+  FaMoneyBill,
+  FaSignOutAlt,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
+
+import { Bar, Line, Bubble } from "react-chartjs-2";
+import Navbar from "@/components/Navbar";
+import MainCard from "@/components/MainCard";
+import StatCard from "@/components/StatCard";
+import Chart from "@/components/Chart";
+import { createContext, useEffect, useState } from "react";
+
+// export const ColorModeContext = createContext<boolean>(false);
+export const ColorModeContext: React.Context<any> = createContext<any>("");
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [data, setData] = useState<any>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/data");
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      alert("some error occured");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const sipBusinessOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: "bottom" as const } },
+    scales: data
+      ? {
+          ...data.sipBusinessOpts.scales,
+        }
+      : null,
+  };
+
+  const monthlyOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: "bottom" as const } },
+    scales: data
+      ? {
+          ...data.monthlyOpts.scales,
+        }
+      : null,
+  };
+
+  const bubbleOpts = {
+    scales: data
+      ? {
+          ...data.bubbleOpts.scales,
+        }
+      : null,
+    plugins: {
+      legend: { position: "bottom" as const },
+    },
+  };
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  return (
+    <ColorModeContext.Provider value={{ darkMode }}>
+      <div
+        className={`w-[100vw] h-[100vh] ${
+          darkMode ? "bg-gray-800 text-white" : "bg-gray-200"
+        } overflow-x-hidden`}
+      >
+        <nav
+          className={`${
+            darkMode ? "bg-black" : "bg-white"
+          } shadow-md rounded-t-lg mt-2.5 mx-2.5 p-2.5 flex items-center justify-between`}
+        >
+          <div className="flex items-center gap-2">WEALTH ELITE</div>
+
+          <div className="flex items-center bg-gray-100 rounded-full px-3 py-1 lg:w-1/3 max-lg:w-1/2">
+            <input
+              type="text"
+              placeholder="SEARCH"
+              className="bg-transparent outline-none flex-1 px-2 text-sm"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <FaSearch className="text-gray-500" />
+          </div>
+
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500"
           >
-            Read our docs
-          </a>
+            {darkMode ? <FaSun /> : <FaMoon />}
+          </button>
+          <div className="max-lg:hidden flex items-center gap-4 text-gray-600 text-lg">
+            <FaFilter className="cursor-pointer hover:text-blue-500" />
+            <FaLightbulb className="cursor-pointer hover:text-blue-500" />
+            <FaCog className="cursor-pointer hover:text-blue-500" />
+            <FaBell className="cursor-pointer hover:text-blue-500" />
+            <FaStar className="cursor-pointer hover:text-blue-500" />
+            <FaUserFriends className="cursor-pointer hover:text-blue-500" />
+            <FaSearch className="cursor-pointer hover:text-blue-500" />
+            <FaLock className="cursor-pointer hover:text-blue-500" />
+            <FaGraduationCap className="cursor-pointer hover:text-blue-500" />
+            <FaMoneyBill className="cursor-pointer hover:text-blue-500" />
+
+            <button className="flex items-center gap-1 text-gray-700 hover:text-red-500 text-sm font-medium">
+              <FaSignOutAlt /> Logout
+            </button>
+          </div>
+          <button className="lg:hidden flex items-center gap-1 text-gray-700 hover:text-red-500 text-sm font-medium">
+            <FaSignOutAlt /> Logout
+          </button>
+        </nav>
+
+        <Navbar />
+
+        <div
+          className={`w-full mt-4 grid md:grid-cols-1 lg:grid-cols-2 gap-3 px-2.5 ${
+            darkMode ? "text-white" : ""
+          }`}
+        >
+          <MainCard MainHeading="AUM 12.19 Cr" SubHeading="+0.77% MoM" />
+          <MainCard MainHeading="SIP 1.39 Lakh" SubHeading="+0% MoM" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <StatCard />
+
+        {data && (
+          <div className="w-full px-2.5 grid max-md:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <Chart
+              heading="CLIENTS"
+              buttonText="Download Report"
+              chart={<Bubble data={data.bubbleData} options={bubbleOpts} />}
+            />
+            <Chart
+              heading="SIP BUISNESS CHART"
+              buttonText="View Report"
+              chart={
+                <Bar data={data.sipBusinessData} options={sipBusinessOpts} />
+              }
+            />
+            <Chart
+              heading="MONTHLY MIS"
+              buttonText="View Report"
+              chart={<Line data={data.monthlyData} options={monthlyOpts} />}
+            />
+          </div>
+        )}
+      </div>
+    </ColorModeContext.Provider>
   );
 }
