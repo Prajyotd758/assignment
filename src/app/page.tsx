@@ -1,4 +1,7 @@
 "use client";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+import { createContext, useEffect, useState, useRef } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,12 +48,48 @@ import Navbar from "@/components/Navbar";
 import MainCard from "@/components/MainCard";
 import StatCard from "@/components/StatCard";
 import Chart from "@/components/Chart";
-import { createContext, useEffect, useState } from "react";
 
-// export const ColorModeContext = createContext<boolean>(false);
 export const ColorModeContext: React.Context<any> = createContext<any>("");
 
 export default function Home() {
+  const canvasRef = useRef<any>(null);
+
+  const handleDownloadPDF = async () => {
+    const element = canvasRef.current;
+    if (!element) return;
+  
+    try {
+      const imgData = await toPng(element, { cacheBust: true });
+  
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+  
+      const elementWidth = element.offsetWidth;
+      const elementHeight = element.offsetHeight;
+  
+      const imgWidth = pdfWidth;
+      const imgHeight = (elementHeight * pdfWidth) / elementWidth;
+  
+      let heightLeft = imgHeight;
+      let position = 0;
+  
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+  
+      while (heightLeft > 0) {
+        position = position - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+      }
+  
+      pdf.save("layout.pdf");
+    } catch (err) {
+      console.error("Error generating PDF:", err);
+    }
+  };
+
   const [data, setData] = useState<any>(null);
 
   const fetchData = async () => {
@@ -104,10 +143,17 @@ export default function Home() {
 
   return (
     <ColorModeContext.Provider value={{ darkMode }}>
+      <button
+        className="absolute top-[90%] left-[85%] px-8 h-11 rounded-3xl text-white bg-[#ff0000]"
+        onClick={() => handleDownloadPDF()}
+      >
+        SAVE LAYOUT
+      </button>
       <div
         className={`w-[100vw] h-[100vh] ${
           darkMode ? "bg-gray-800 text-white" : "bg-gray-200"
         } overflow-x-hidden`}
+        ref={canvasRef}
       >
         <nav
           className={`${
