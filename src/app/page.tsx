@@ -144,7 +144,7 @@ export default function Home() {
   return (
     <ColorModeContext.Provider value={{ darkMode }}>
       <button
-        className="absolute top-[90%] left-[85%] px-8 h-11 rounded-3xl text-white bg-[#ff0000]"
+        className="absolute top-[90%] max-md:left-[50%] md:left-[75%] lg:left-[80%] px-8 h-11 rounded-3xl text-white bg-[#ff0000]"
         onClick={() => handleDownloadPDF()}
       >
         SAVE LAYOUT
@@ -173,7 +173,7 @@ export default function Home() {
 
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500"
+            className="p-2 mx-2.5 rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500"
           >
             {darkMode ? <FaSun /> : <FaMoon />}
           </button>
